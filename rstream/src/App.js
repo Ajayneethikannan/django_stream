@@ -1,21 +1,74 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-
+import {Form} from 'semantic-ui-react';
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
+  constructor(props)
+   {
+     super(props);
+     this.state = {username:'',
+                   password:''};
+     this.Submit = this.Submit.bind(this);
+     this.Change1 = this.Change1.bind(this);
+     this.Change2 = this.Change2.bind(this);
+   }
+
+   Change1(event)
+   {
+     this.setState({username:event.target.value});
+   }
+   Change2(event)
+   {
+     this.setState({password:event.target.value})
+   }
+  Submit()
+  {
+
+       const username = this.state.username;
+       const password = this.state.password;
+
+
+       fetch("http://127.0.0.1:8000/login/",{
+           method:'post',
+           body:JSON.stringify({'username': username,
+
+                 'password': password}),
+              headers:{'content-type': 'application/json'}
+
+               }).then(function(response){
+                 return response.json();
+               }).then(function(data){
+                 console.log(data);
+               });
+
+
+
   }
-}
+
+
+
+   render()
+   {
+
+      return(
+          <Form>
+          <Form.Input label='username' placeholder='enter your username' onChange={this.Change1} value={this.state.username}/>
+          <Form.Input label='password' placeholder='enter your password'type='password' onChange={this.Change2}  value={this.state.password}/>
+
+          <Form.Button onClick={this.Submit} >Submit</Form.Button>
+          </Form>
+
+
+      );
+
+
+   }
+
+
+
+
+
+
+  }
+
 
 export default App;

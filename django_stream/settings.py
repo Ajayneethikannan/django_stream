@@ -25,8 +25,8 @@ SECRET_KEY = 'p+yhu-2)7i$368w0j_i*u7zw^7p43hi+i89s#w$+zrvk4-h4bf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+AUTH_USER_MODEL = 'sa.User'
 
 # Application definition
 
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'sa',
     'rest_framework',
     'corsheaders', 
+    'rest_auth',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -124,5 +126,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 CORS_ORIGIN_WHITELIST = (
-    'localhost:3000/'
+    'localhost:3000/',
 )
+CORS_ORIGIN_ALLOW_ALL = True
