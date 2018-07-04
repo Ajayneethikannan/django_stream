@@ -30,6 +30,8 @@ AUTH_USER_MODEL = 'sa.User'
 
 # Application definition
 
+ASGI_APPLICATION = "sa.routing.application"
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,9 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sa',
     'rest_framework',
-    'corsheaders', 
+    'corsheaders',
     'rest_auth',
     'rest_framework.authtoken',
+    'channels',
 ]
 
 MIDDLEWARE = [

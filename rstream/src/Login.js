@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
+import './Login.css';
 import {Form} from 'semantic-ui-react';
-class App extends Component {
+
+
+
+class Login extends Component {
   constructor(props)
    {
      super(props);
@@ -10,6 +13,7 @@ class App extends Component {
      this.Submit = this.Submit.bind(this);
      this.Change1 = this.Change1.bind(this);
      this.Change2 = this.Change2.bind(this);
+
    }
 
    Change1(event)
@@ -37,12 +41,13 @@ class App extends Component {
                }).then(function(response){
                  return response.json();
                }).then(function(data){
-                 console.log(data);
+                 //do something
                });
 
 
 
   }
+
 
 
 
@@ -55,9 +60,8 @@ class App extends Component {
           <Form.Input label='password' placeholder='enter your password'type='password' onChange={this.Change2}  value={this.state.password}/>
 
           <Form.Button onClick={this.Submit} >Submit</Form.Button>
+
           </Form>
-
-
       );
 
 
@@ -69,6 +73,6 @@ class App extends Component {
 
 
   }
+//AIzaSyAN-0-1obttU_sT7iopxfWjnUtri6eSmFk
 
-
-export default App;
+export default Login;
