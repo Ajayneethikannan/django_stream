@@ -30,7 +30,15 @@ AUTH_USER_MODEL = 'sa.User'
 
 # Application definition
 
-ASGI_APPLICATION = "sa.routing.application"
+ASGI_APPLICATION = "django_stream.routing.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,6 +53,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_framework.authtoken',
     'channels',
+    'control',
 ]
 
 MIDDLEWARE = [
