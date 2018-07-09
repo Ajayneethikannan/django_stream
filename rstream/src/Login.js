@@ -33,7 +33,8 @@ class Login extends Component {
        let self = this;
        const username = this.state.username;
        const password = this.state.password;
-
+      console.log(username);
+      console.log(password);
        fetch("http://127.0.0.1:8000/login/",{
            method:'post',
            body:JSON.stringify({'username': username,
@@ -50,6 +51,18 @@ class Login extends Component {
                    console.log(sessionStorage.token);
                    axios.defaults.headers.common["Authorization"] = "Token "+ data["key"];
                    self.setState({visible:false});
+
+                             window.controlSocket.send(JSON.stringify({
+                               'token':sessionStorage.token,
+
+                             }))  ;
+
+                             window.controlSocket.onmessage = function(event){
+                               console.log(JSON.parse(event.data));}
+                               axios.get('http://127.0.0.1:8000/test_auth/')
+  .then(function(response) {
+    console.log(response.data);
+  });
                  }
                  else {
                    {
@@ -58,13 +71,6 @@ class Login extends Component {
                  }
                });
 
-          window.controlSocket.send(JSON.stringify({
-            'token':sessionStorage.token,
-
-          }))  ;
-
-          window.controlSocket.onmessage = function(event){
-            console.log(JSON.parse(event.data));}
 
 
   }

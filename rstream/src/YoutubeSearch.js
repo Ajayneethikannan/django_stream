@@ -1,6 +1,6 @@
 import React from 'react';
 import searchYoutube from 'youtube-api-search';
-import {Icon, Input} from 'semantic-ui-react';
+import {Icon, Input, Card} from 'semantic-ui-react';
 
 class YoutubeSearch extends React.Component{
 
@@ -22,9 +22,9 @@ class YoutubeSearch extends React.Component{
   Submit(value){
     let self = this;
     const term = value;
-    searchYoutube({key:'AIzaSyAN-0-1obttU_sT7iopxfWjnUtri6eSmFk',term:term,maxVideos:5},
+    searchYoutube({key:'AIzaSyAN-0-1obttU_sT7iopxfWjnUtri6eSmFk',term:term,maxVideos:10},
     (videos) => {self.setState({results:videos});console.log(videos)});
-    
+
 
   }
   render(){
@@ -85,15 +85,12 @@ loadResults()
     const  a = Array.from(this.props.results);
     console.log(a);
     let that = this;
-    const style = {border:'5px tomato solid',};
+    const style = {border:'10px tomato solid'};
     const b = a.map(function(video)  {return(
-     <div key={video.id.videoId} id={video.id.videoId} onClick={this.props.addSong()} style={style} >
-     <img src={video.snippet.thumbnails.default.url} onClick={() => {that.props.addSong(video)}}/>
-       <p><b>{video.snippet.title}</b></p>
-       <p>{video.snippet.description}</p>
+     <Card key={video.id.videoId} id={video.id.videoId} onClick={()=>{this.props.addSong(video)}} style={style} image ={video.snippet.thumbnails.default.url} header = {video.snippet.title} description = {video.snippet.description}/>
 
 
-     </div>
+
 
    );}.bind(this));
       return b;

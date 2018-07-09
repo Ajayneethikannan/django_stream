@@ -26,40 +26,49 @@ class streamConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)#returns a dict not an object
-        message = 1
+
         if 'token' in text_data_json:
             token = text_data_json['token']
             token = Token.objects.get(key = token)
             self.scope['user'] = token.user
-            message = self.scope['user'].username
+            self.send(json.dumps({'message':self.channel_name}))
 
 
-
-        if self.authenticate():
-            async_to_sync(self.channel_layer.group_send)(
-                self.stream_group_name,
-               {
-                   'type': 'control.message',
-                   'message': message,
-               }
-            )
+        if 'scontrol' in text_data_json:
+            if self.authenticate():
+                async_to_sync(self.channel_layer.group_send)(
+                    self.stream_group_name,
+                    {
+                    'type': 'control.message',
+                    'scontrol': text_data_json['scontrol'],
+                    }
+                )
 
 
 
     # Receive message from room group
     def control_message(self, event):
-        message = event['message']
+        a = {}
+        for x in event:
+            a[x] = event[x]
+        if 'type' in event:
+            del(a['type'])
 
         # Send message to WebSocket
-        self.send(text_data=json.dumps({
-            'message': message,
-        }))
-        
-    #makes sure that the user is logged in
+        self.send(text_data=json.dumps(a))
+
+
+    def control_update_queue(self, event):
+        self.send(json.dumps({'provoked':'yeah'}))
+
+    #makes sure that the user is logged in and the token still exists
     def authenticate(self):
         a  = self.scope['user']
-        b  = Token.objects.get(user = a)
-        if a is None or b is None:
+        if a is None:
             return 0
         else:
-            return 1
+            b  = Token.objects.get(user = a)
+            if b is None:
+                return 0
+            else:
+                return 1
