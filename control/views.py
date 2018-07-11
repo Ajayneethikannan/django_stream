@@ -13,11 +13,12 @@ from asgiref.sync import async_to_sync
 from sa.serializers import SongSerializer
 from rest_framework.decorators import api_view
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+import json
 
 class SongControl(GenericAPIView, DestroyModelMixin, ListModelMixin, CreateModelMixin, UpdateModelMixin):
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-    queryset = Song.objects.all()
+    queryset = Song.objects.order_by('-level','created',)
     serializer_class  = SongSerializer
     lookup_field = 'videoId'
     channel_layer = get_channel_layer()
@@ -25,7 +26,7 @@ class SongControl(GenericAPIView, DestroyModelMixin, ListModelMixin, CreateModel
     #create method inbuilt
     def perform_create(self, serializer):
         serializer.save(fans=[User.objects.get(username = self.request.user.username)])
-        async_to_sync(self.channel_layer.group_send)("control",{'type':'control.update_queue','user':self.request.user.username,})
+        async_to_sync(self.channel_layer.group_send)("control",{'type':'control.update_queue',})
 
 
 
@@ -41,7 +42,7 @@ class SongControl(GenericAPIView, DestroyModelMixin, ListModelMixin, CreateModel
                 a.fans.add(request.user)
                 a.level += request.user.level
                 a.save()
-                async_to_sync(self.channel_layer.group_send)("control",{'type':'control.update_queue','queue':'',})
+                async_to_sync(self.channel_layer.group_send)("control",{'type':'control.update_queue',})
                 return Response("success")
             else:
                 return Response("fail")
@@ -61,8 +62,10 @@ def DeleteSong(request, videoId):
         if request.user.level >= a.level:
             a.delete()
             channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)("control",{'type':'control.update_queue','queue':'',})
+            async_to_sync(channel_layer.group_send)("control",{'type':'control.update_queue',})
             return Response("deleted")
+        else:
+            return Response("not allowed")
 
     except Song.DoesNotExist:
         return Response("song does not exist")

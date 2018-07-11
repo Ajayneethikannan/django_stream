@@ -25,6 +25,6 @@ urlpatterns = [
     path('logout/', LogoutViewEx.as_view(), name='rest_logout'),
     path('login/', LoginView.as_view(), name='rest_login'),
     path('control/', SongControl.as_view(), name='control'),
-    re_path(r'^delete/(?P<videoId>[0-9a-zA-Z]+)/$', DeleteSong, name='delete'),
+    re_path(r'^delete/(?P<videoId>[0-9a-zA-Z_\-]+)/$', DeleteSong, name='delete'),
 
 ]

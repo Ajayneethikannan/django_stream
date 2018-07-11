@@ -2,6 +2,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
 from rest_framework.authtoken.models import Token
+from sa.models import Song
 
 class streamConsumer(WebsocketConsumer):
     def connect(self):
@@ -34,15 +35,47 @@ class streamConsumer(WebsocketConsumer):
             self.send(json.dumps({'message':self.channel_name}))
 
 
-        if 'scontrol' in text_data_json:
+        if 'scontrol' in text_data_json or 'sync' in text_data_json:
             if self.authenticate():
+                text_data_json['type'] = 'control.message'
                 async_to_sync(self.channel_layer.group_send)(
                     self.stream_group_name,
-                    {
-                    'type': 'control.message',
-                    'scontrol': text_data_json['scontrol'],
+                    text_data_json
+                    )
+
+        if 'sync_request' in text_data_json or 'sync_request_url' in text_data_json or 'request_url' in text_data_json:
+            text_data_json['type'] = 'control.message'
+            async_to_sync(self.channel_layer.group_send)(
+                self.stream_group_name,
+                text_data_json
+                )
+
+        if 'next' in text_data_json and self.authenticate():
+            videoId = text_data_json['next']
+            try:
+                song =  Song.objects.get(videoId=videoId)
+                async_to_sync(self.channel_layer.group_send)(
+                    self.stream_group_name,
+                    {'type':'control.message',
+                    'url':videoId,
+                    'seek':0,
+                    'playing':True,
+                    'scontrol':True,
                     }
                 )
+                song.delete()
+                async_to_sync(self.channel_layer.group_send)(
+                    self.stream_group_name,
+                    {'type':'control.message',
+                    'control':'update',
+                    }
+                )
+            except Song.DoesNotExist:
+                self.send(json.dumps({'message':'already executed'}))
+
+
+
+
 
 
 
@@ -58,8 +91,8 @@ class streamConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps(a))
 
 
-    def control_update_queue(self, event):
-        self.send(json.dumps({'provoked':'yeah'}))
+    def control_update_queue(self,event):
+        self.send(json.dumps({'control':'update'}))
 
     #makes sure that the user is logged in and the token still exists
     def authenticate(self):

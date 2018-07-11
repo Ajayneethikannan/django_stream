@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './Login.css';
 import {Form} from 'semantic-ui-react';
+import Queue from './Queue';
 var axios = require('axios');
+
 
 //using mouseover and mouseout events //
 
@@ -19,6 +21,7 @@ class Login extends Component {
 
 
    }
+
 
    Change1(event)
    {
@@ -57,12 +60,8 @@ class Login extends Component {
 
                              }))  ;
 
-                             window.controlSocket.onmessage = function(event){
-                               console.log(JSON.parse(event.data));}
-                               axios.get('http://127.0.0.1:8000/test_auth/')
-  .then(function(response) {
-    console.log(response.data);
-  });
+
+
                  }
                  else {
                    {
@@ -91,7 +90,7 @@ class Login extends Component {
           </Form>
       );
     }
-      else return null;
+      else return <Queue/>;
 
 
    }

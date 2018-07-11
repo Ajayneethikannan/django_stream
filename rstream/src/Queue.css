@@ -1,0 +1,15 @@
+.song_list{
+  position:fixed;
+    right: 0;
+    top: 0px;
+    height:100vh;
+  overflow:scroll;
+
+}
+
+.card{
+  border: black solid 2px;
+  margin: 0.5vh;
+  width:10vw;
+
+}

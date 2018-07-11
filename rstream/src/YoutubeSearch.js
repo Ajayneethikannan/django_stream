@@ -1,7 +1,7 @@
 import React from 'react';
 import searchYoutube from 'youtube-api-search';
 import {Icon, Input, Card} from 'semantic-ui-react';
-
+import axios from 'axios';
 class YoutubeSearch extends React.Component{
 
   constructor(props)
@@ -16,7 +16,14 @@ class YoutubeSearch extends React.Component{
   }
   addSong(video)
   {
-    console.log(video);
+    axios.post('http://127.0.0.1:8000/control/',
+    {
+      'videoId':video.id.videoId,
+      'img_url':video.snippet.thumbnails.default.url,
+      'song_name':video.snippet.title,
+    }).then(function(response){
+      console.log(response.data);
+    })
 
   }
   Submit(value){
