@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './Login.css';
 import {Form} from 'semantic-ui-react';
 import Queue from './Queue';
+import './index.css';
 var axios = require('axios');
 
 
@@ -12,8 +12,7 @@ class Login extends Component {
    {
      super(props);
      this.state = {username:'',
-                   password:'',
-                   visible:true};
+                   password:'',};
      this.Submit = this.Submit.bind(this);
      this.Change1 = this.Change1.bind(this);
      this.Change2 = this.Change2.bind(this);
@@ -53,7 +52,7 @@ class Login extends Component {
                    sessionStorage.token = data["key"];
                    console.log(sessionStorage.token);
                    axios.defaults.headers.common["Authorization"] = "Token "+ data["key"];
-                   self.setState({visible:false});
+
 
                              window.controlSocket.send(JSON.stringify({
                                'token':sessionStorage.token,
@@ -61,11 +60,12 @@ class Login extends Component {
                              }))  ;
 
 
+                self.props.changeMode('player');
 
                  }
                  else {
                    {
-                     alert("try again!");
+                     self.setState({error:"try again!"});
                    }
                  }
                });
@@ -79,18 +79,22 @@ class Login extends Component {
 
    render()
    {
-      if(this.state.visible)
-      {return(
-          <Form>
-          <Form.Input label='username' placeholder='enter your username' onChange={this.Change1} value={this.state.username}/>
-          <Form.Input label='password' placeholder='enter your password'type='password' onChange={this.Change2}  value={this.state.password}/>
+
+      return(
+        <div className='login-form'>
+          <Form >
+          <h2>Login....</h2>
+          <Form.Input label='Username'  placeholder='enter your username' onChange={this.Change1} value={this.state.username}/>
+          <Form.Input label='Password'  placeholder='enter your password'type='password' onChange={this.Change2}  value={this.state.password}/>
 
           <Form.Button onClick={() => {this.Submit()}} >Submit</Form.Button>
 
           </Form>
+          <div><b>{this.state.error}</b></div>
+          </div>
       );
-    }
-      else return <Queue/>;
+
+
 
 
    }

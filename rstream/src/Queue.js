@@ -2,7 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import {Button, Card, Icon} from 'semantic-ui-react';
 import './Queue.css';
+import './index.css';
 import Player from './Player';
+import Slide from 'react-reveal/Slide';
 class Queue extends React.Component
 {
   constructor(props){
@@ -76,12 +78,12 @@ class Queue extends React.Component
 
     }
     else if(data.scontrol)
-    {
+    {  that.player.seekTo(data.seek);
         that.setState({'url':data.url});
         that.setState({'playing':data.playing});
 
         that.setState({'sync':true});
-        that.player.seekTo(data.seek);
+
     }
     else if(data.sync_request)
     {   if(that.state.sync == true){
@@ -124,11 +126,25 @@ class Queue extends React.Component
     let that = this;
     const songs = Array.from(this.state.songs);
     const b = songs.map(function(song){
-      return <div key={song.videoId}><Card key={song.videoId} image= {song.img_url} default={'https://www.google.co.in/search?q=music&tbm=isch&source=lnms&sa=X&ved=0ahUKEwjUxuGho5XcAhWOWX0KHYQzBf4Q_AUIDCgD&biw=1478&bih=666&dpr=1.3#imgrc=kt_r70gjH_cv5M:'}header={song.song_name} description={"Level = "+song.level}/>
-              <Icon name='eject' onClick={() => {that.deleteSong(song.videoId)}}/><Icon name='thumbs up' onClick={()=>{that.likeSong(song.videoId)}}/>
+      return <div key={song.videoId} className="song">
+      <div className="list_item">
+             <img src={song.img_url}/>
+
+             <h3>{song.song_name}</h3>
+      </div>
+
+
+
+              <div className="song-update">
+              <Icon name='thumbs up' onClick={()=>{that.likeSong(song.videoId)}}/>
+              <h4>Pref-Level = {song.level}</h4>
+              <Icon name='eject' onClick={() => {that.deleteSong(song.videoId)}}/>
+              </div>
               </div>
     })
-    return <div><Player retrieve_url = {this.retrieve_url} url={this.state.url} playing={this.state.playing}  setRef={this.setRef}/><div className='song_list'>{b}</div></div>;
+
+
+    return <div><Player retrieve_url = {this.retrieve_url} url={this.state.url} playing={this.state.playing}  setRef={this.setRef}/><Slide right><div className='song_list'><h1>Queue</h1>{b}</div></Slide></div>;
 
          }
 

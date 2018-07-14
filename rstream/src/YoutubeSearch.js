@@ -2,6 +2,7 @@ import React from 'react';
 import searchYoutube from 'youtube-api-search';
 import {Icon, Input, Card} from 'semantic-ui-react';
 import axios from 'axios';
+import Slide from 'react-reveal/Slide';
 class YoutubeSearch extends React.Component{
 
   constructor(props)
@@ -36,10 +37,13 @@ class YoutubeSearch extends React.Component{
   }
   render(){
 
-   return (<div>
+   return (
+     <Slide left>
+     <div>
      <SearchBar Submit = {this.Submit}/>
      <Results results={this.state.results} addSong = {this.addSong}/>
-     </div>);
+     </div>
+   </Slide>);
 
 
   }
@@ -72,7 +76,7 @@ class SearchBar extends React.Component
   {
 
     return (
-      <Input icon={<Icon name='search' inverted circular link onClick={this.Click}/>} value = {this.state.term} onChange={this.Change} placeholder="enter video name"/>
+      <Input className="search" icon={<Icon name='search' inverted circular link onClick={this.Click}/>} value = {this.state.term} onChange={this.Change} placeholder="enter video name"/>
     );
 
 
@@ -92,10 +96,14 @@ loadResults()
     const  a = Array.from(this.props.results);
     console.log(a);
     let that = this;
-    const style = {border:'10px tomato solid'};
+    const style = {border:'2px white solid'};
     const b = a.map(function(video)  {return(
-     <Card key={video.id.videoId} id={video.id.videoId} onClick={()=>{this.props.addSong(video)}} style={style} image ={video.snippet.thumbnails.default.url} header = {video.snippet.title} description = {video.snippet.description}/>
+      <div className="list_song" key={video.id.videoId} onClick={()=>{this.props.addSong(video)}}>
+      <img src={video.snippet.thumbnails.default.url}/>
+      <h4>{video.snippet.title}</h4>
 
+
+     </div>
 
 
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
-import {Button, Input} from 'semantic-ui-react';
+import {Button, Input, Icon} from 'semantic-ui-react';
 import axios from 'axios';
+import {Slider} from 'react-semantic-ui-range';
 
 class Player extends React.Component {
 
@@ -25,6 +26,7 @@ class Player extends React.Component {
         played:0,
         url_sync:false,
         full_sync:false,
+        seeking:false,
 
 
 
@@ -64,10 +66,12 @@ scontrol - play, pause, seek  */
     }
 
 
+
     seekChange(event){
       if(event.target.id == 'volume')
       this.setState({'volume':parseFloat(event.target.value)});
       else {
+        this.setState({seeking:true});
         this.setState({played:event.target.value});
       }
 
@@ -88,12 +92,13 @@ scontrol - play, pause, seek  */
         a['url'] = this.props.url;
       }
       window.controlSocket.send(JSON.stringify(a));
+      this.setState({seeking:false});
 
 
     }
 
     onProgress = (state) =>
-    {
+    { if(this.state.seeking == false)
       this.setState({played:state.played});
     }
 
@@ -120,18 +125,41 @@ scontrol - play, pause, seek  */
       const played = this.state.played;
       const playing = this.props.playing;
       const url = "http://www.youtube.com/watch?v=" + this.props.url;
-
-
+      var name = '';
+      var vol_name ='';
+      if(this.state.muted == false)
+         vol_name='volume off';
+      else {
+        vol_name = 'volume up';
+      }
+      if(this.props.playing == true)
+              {name = 'pause';}
+      else
+      {name = 'play';
+    }
 
       return (<div>
-        <Button id='play' onClick={this.scontrol}>{!playing ? 'Play' : 'Pause'}</Button>
-        <Button id='muted' onClick={this.icontrol}>MUTE</Button>
-        <Button id='next' onClick={this.next}>NEXT</Button>
-        <Button id='sync' onClick={this.sync}>MANUAL SYNC</Button>
-        <input type='range' min={0} max={1} value={volume} id="volume" step={0.01} onChange={this.seekChange} />
-        <input type='range' min={0} max={1} value={played} id="seek" step={0.01} onChange={this.seekChange} onMouseUp={this.scontrol} />
+        <div >
+        <div className="controller">
+        <div className="seeker">
+        <div className="scontrol">
+        <Icon name={vol_name} size='large' id='muted' onClick={this.icontrol}/ >
+        <Icon id='play' size='large' name={name} color='white' onClick={this.scontrol}/>
+        <Icon name='step forward' size='large' id='next' onClick={this.next}/></div>
 
+        <div><Slider style = {{width:'15vw'}} color = 'teal' inverted = {false} settings={{min:0,
+                           max:1,
+                           start:this.state.volume,
+                           step:0.05,
 
+                          onChange:(value)=>{this.setState({'volume':value})}}}/>
+                          </div></div>
+
+        <div className="seeker"><input type='range' min={0} max={1} value={played} id="seek" step={0.01} onChange={this.seekChange} onMouseUp={this.scontrol} />
+         </div>
+         <Button id='sync' onClick={this.sync}>manual sync</Button>
+         </div></div>
+        <div id="player">
         <ReactPlayer
         id = 'player'
         ref = {this.props.setRef}
@@ -142,7 +170,9 @@ scontrol - play, pause, seek  */
         onEnded = {this.next}
         onProgress = {this.onProgress}
         style={{'pointerEvents':'none'}}
-        onReady = {this.full_sync}/>
+        onReady = {this.full_sync}
+        progressInterval = {250}/>
+        </div>
 
         </div>) ;
     }
