@@ -10,7 +10,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from sa.serializers import SongSerializer
+from sa.serializers import SongSerializer, UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 import json
@@ -69,3 +69,24 @@ def DeleteSong(request, videoId):
 
     except Song.DoesNotExist:
         return Response("song does not exist")
+
+class UserControl(GenericAPIView, ListModelMixin):
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = User.objects.order_by('level')
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        return self.list(request)
+
+    def post(self, request):
+        user = request.user
+        if 'tag' in request.data or 'year' in request.data:
+            user.tag = request.data['tag']
+            user.year = request.data['year']
+            user.save()
+        return Response(UserSerializer(request.user).data)
+
+    def delete(self, request):
+        request.user.delete()
+        return Response("deleted")

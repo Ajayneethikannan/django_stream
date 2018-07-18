@@ -60,6 +60,7 @@ tcontrol - nextSong
 scontrol - play, pause, seek  */
     next(event)
     {const videoId = this.props.retrieve_url();
+      console.log(videoId);
       if(videoId != null)
       window.controlSocket.send(JSON.stringify({'next':videoId}));
 
@@ -139,7 +140,8 @@ scontrol - play, pause, seek  */
     }
 
       return (<div>
-        <div >
+        <div>
+
         <div className="controller">
         <div className="seeker">
         <div className="scontrol">
@@ -171,7 +173,8 @@ scontrol - play, pause, seek  */
         onProgress = {this.onProgress}
         style={{'pointerEvents':'none'}}
         onReady = {this.full_sync}
-        progressInterval = {250}/>
+        progressInterval = {250}
+        />
         </div>
 
         </div>) ;

@@ -38,12 +38,12 @@ class YoutubeSearch extends React.Component{
   render(){
 
    return (
-     <Slide left>
-     <div>
+
+     <div className="search_list">
      <SearchBar Submit = {this.Submit}/>
      <Results results={this.state.results} addSong = {this.addSong}/>
      </div>
-   </Slide>);
+   );
 
 
   }

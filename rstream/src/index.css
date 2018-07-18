@@ -21,13 +21,12 @@ label{
    flex-wrap:wrap;
    color:white;
    background-color:rgb(5,5,5);
+   overflow:hidden;
+
+
 
 }
-#root2{
-  position:absolute;
-  z-index: 2;
-  color: white;
-}
+
 
 .Login
 {
@@ -40,6 +39,22 @@ label{
   align-items:center;
   background-color:rgb(5,5,5);
 
+}
+.logout{
+  position:absolute;
+  top:0;
+  left:35vw;
+  display: flex;
+  z-index:7;
+  justify-content: space-between;
+  width:30vw;
+  opacity:0;
+  transition:1s;
+  margin:2vh;
+
+}
+.logout:hover{
+  opacity:1;
 }
 .seeker{
   margin:2vh;
@@ -76,7 +91,7 @@ label{
   justify-content:space-between;
   width:22vw;
   background-color: teal;
-  text-align: center;
+  text-align: center;.5
   border-bottom:white solid 2px;
 }
 .list_song{
@@ -121,8 +136,8 @@ img{
   padding:5vh;
   opacity:0;
 
-  left:0vw;
-  width:100vw;
+  left:20vw;
+  width:60vw;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -143,7 +158,7 @@ img{
 }
 
 .login-form{
-  border:white 3px solid;
+
   color: white!important;
   display:flex;
   flex-direction:column;
@@ -152,6 +167,7 @@ img{
   margin:5vh;
   border:5vh;
   padding:10vh;
+  border:white 3px solid;
 
 
 }
@@ -172,9 +188,7 @@ button.ui.button {
     background-color: rgba(0,0,0,0);
     border: white 1.5px solid;
 }
-.login-form {
-    border: white 3px solid;
-}
+
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     input[type='range'] {
       overflow: hidden;
@@ -205,8 +219,73 @@ button.ui.button {
   top:0;
   left:30vw;
 }
+.search_list{
+  overflow: scroll;
+
+}
+.user-control{
+  display:flex;
+
+  padding:2vh;
+  height:40vh;
+
+
+  justify-content:space-around;
+  align-items:flex-start;
+}
+.user-control1{
+  left:27vw;
+
+  border:white solid 2px;
+  top:9vh;
+  width:45vw;
+  height:0;
+  position:absolute;
+  overflow:scroll;
+  z-index:7;
+  background-color:black;
+  transition: height 0.5s, width 0.5s;
+}
+.user-control2{
+  left:27vw;
+
+  border:white solid 2px;
+  opacity:1;
+  top:9vh;
+  height:50vh;
+  width:45vw;
+  position:absolute;
+  overflow:scroll;
+  background-color:black;
+  z-index:7;
+  transition: height 0.5s, width 0.5s;
+
+}
+.user-list{
+  width:40vw;
+  height:44vh;
+  overflow:scroll;
+}
 .volume
 
 {
   width:10vw;
+}
+.extra_scroll{
+  overflow:hidden;
+}
+.user{
+
+  height:25vh;
+
+}
+label{
+  display:block!important;
+}
+.sign-up{
+  margin:1vh;
+  transition:0.5s;
+}
+.sign-up:hover{
+  color: teal;
 }

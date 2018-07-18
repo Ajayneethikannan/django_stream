@@ -5,6 +5,8 @@ import './Queue.css';
 import './index.css';
 import Player from './Player';
 import Slide from 'react-reveal/Slide';
+import YoutubeSearch from './YoutubeSearch';
+import UserControl from './UserControl';
 class Queue extends React.Component
 {
   constructor(props){
@@ -13,14 +15,31 @@ class Queue extends React.Component
     url:'Io0fBr1XBUA',
     playing:false,
     seek:0,
-  sync:false};
+    sync:false,
+    show_search:false,
+    show_queue:true,
+    show_user:false};
     this.update = this.update.bind(this);
     this.likeSong = this.likeSong.bind(this);
     this.deleteSong = this.deleteSong.bind(this);
     this.retrieve_url = this.retrieve_url.bind(this);
     this.setRef = this.setRef.bind(this);
+    this.show_search = this.show_search.bind(this);
+    this.show_queue = this.show_queue.bind(this);
+    this.show_user = this.show_user.bind(this);
 
 
+  }
+  show_search()
+  {
+    this.setState({show_search:!this.state.show_search});
+  }
+  show_queue(){
+    this.setState({show_queue:!this.state.show_queue});
+  }
+  show_user()
+  {
+    this.setState({show_user:!this.state.show_user});
   }
 
  retrieve_url()
@@ -141,10 +160,20 @@ class Queue extends React.Component
               <Icon name='eject' onClick={() => {that.deleteSong(song.videoId)}}/>
               </div>
               </div>
-    })
+    });
 
+    const a  = (this.state.show_user)?"user-control2" :"user-control1";
+    return <div>
+    <Slide left collapse when={this.state.show_search}><YoutubeSearch/></Slide>
+    <div className={a}><UserControl Logout = {this.props.Logout}/></div>
 
-    return <div><Player retrieve_url = {this.retrieve_url} url={this.state.url} playing={this.state.playing}  setRef={this.setRef}/><Slide right><div className='song_list'><h1>Queue</h1>{b}</div></Slide></div>;
+    <div className = 'logout'>
+    <Icon name="angle left"  size="huge" onClick={this.show_search}/>
+    <Icon name="angle down" size="huge" onClick={this.show_user} />
+    <Icon name="angle right" size="huge" onClick={this.show_queue}/ ></div>
+    <Player retrieve_url = {this.retrieve_url} url={this.state.url} playing={this.state.playing}  setRef={this.setRef}/>
+    <Slide right collapse when={this.state.show_queue}><div className='song_list'><h1>Queue</h1>{b}</div></Slide>
+    </div>;
 
          }
 

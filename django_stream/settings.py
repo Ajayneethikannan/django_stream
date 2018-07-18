@@ -24,7 +24,7 @@ SECRET_KEY = 'p+yhu-2)7i$368w0j_i*u7zw^7p43hi+i89s#w$+zrvk4-h4bf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'sa.User'
 
@@ -54,8 +54,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'channels',
     'control',
-]
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    'allauth.socialaccount',
 
+]
+SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -132,9 +138,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
 CORS_ORIGIN_WHITELIST = (

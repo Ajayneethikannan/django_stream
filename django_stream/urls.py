@@ -17,13 +17,17 @@ from django.contrib import admin
 from django.urls import path, re_path
 from rest_auth.views import LoginView
 from sa.views import TestAuthView, LogoutViewEx
-from control.views import SongControl, DeleteSong
+from control.views import SongControl, DeleteSong, UserControl
+from django.conf.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    re_path(r'^rest-auth/', include('rest_auth.urls')),
+    re_path(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     path('test_auth/',TestAuthView.as_view(), name='test_auth'),
     path('logout/', LogoutViewEx.as_view(), name='rest_logout'),
     path('login/', LoginView.as_view(), name='rest_login'),
+    path('user/', UserControl.as_view(), name='user_control'),
     path('control/', SongControl.as_view(), name='control'),
     re_path(r'^delete/(?P<videoId>[0-9a-zA-Z_\-]+)/$', DeleteSong, name='delete'),
 

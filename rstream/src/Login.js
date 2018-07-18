@@ -37,11 +37,11 @@ class Login extends Component {
        const password = this.state.password;
       console.log(username);
       console.log(password);
-       fetch("http://127.0.0.1:8000/login/",{
+       fetch("http://127.0.0.1:8000/rest-auth/login/",{
            method:'post',
            body:JSON.stringify({'username': username,
 
-                 'password': password}),
+                 'password': password,}),
               headers:{'content-type': 'application/json'}
 
                }).then(function(response){
@@ -91,6 +91,7 @@ class Login extends Component {
 
           </Form>
           <div><b>{this.state.error}</b></div>
+          <div className="sign-up" ><h3 onClick={()=>{this.props.changeMode('signup')}}>Sign Up</h3></div>
           </div>
       );
 
