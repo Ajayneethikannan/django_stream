@@ -28,7 +28,7 @@ class SignUp extends React.Component{
       {
         if(response.data.key){
           alert("successfully created!");
-          that.changeMode('login');
+          that.props.changeMode('login');
         }
       }
     )

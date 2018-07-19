@@ -7,7 +7,7 @@ class UserControl extends React.Component{
     super(props);
     this.state ={users:'',
     user:'',
-    changing:false,
+    changing:true,
     year:'',
     tag:'',
     };
@@ -79,9 +79,9 @@ class UserControl extends React.Component{
        </div>);
     const users = Array.from(this.state.users).map(function(user)
   {
-    const style = { border:'white 2px solid',color:'white!important',padding:'2vh',margin:'2vh'};
+    
 
-    return (<div style={style}>
+    return (<div className="friend">
             <h4>Name: {user.username}</h4>
             <h4>Year: {user.year}</h4>
             <h4>Level: {user.level}</h4>

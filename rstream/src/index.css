@@ -289,3 +289,14 @@ label{
 .sign-up:hover{
   color: teal;
 }
+.friend{
+  border:white 2px solid;
+  color:white;
+  padding:2vh;
+  margin:2vh;
+  background-color:tomato;
+  transition:0.5s;
+}
+.friend:hover{
+  background-color:teal;
+}
