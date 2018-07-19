@@ -1,4 +1,4 @@
 db.sqlite3
 local_settings.py
 *.log
-node_modules/
+*node_modules/
