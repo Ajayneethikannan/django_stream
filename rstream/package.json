@@ -25,6 +25,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "semantic-ui": "^2.3.3"
+    "semantic-ui": "^2.5.0"
   }
 }
